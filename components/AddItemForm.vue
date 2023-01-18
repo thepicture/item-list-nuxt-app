@@ -5,6 +5,8 @@
       label="Наименование товара"
       placeholder="Введите наименование товара"
       mandatory
+      :rule="rules.title"
+      @input="input"
     />
     <TextInput
       name="description"
@@ -12,24 +14,48 @@
       placeholder="Введите описание товара"
       multiline
       class="description"
+      :rule="rules.description"
+      @input="input"
     />
     <TextInput
       name="imageLink"
       label="Ссылка на изображение товара"
       placeholder="Введите ссылку"
       mandatory
+      :rule="rules.imageLink"
+      @input="input"
     />
     <TextInput
       name="priceInRubles"
       label="Цена товара"
       placeholder="Введите цену"
       mandatory
+      :rule="rules.priceInRubles"
+      @input="input"
     />
-    <Button type="submit">Добавить товар</Button>
+    <Button type="submit" :enabled="canAddItem">Добавить товар</Button>
   </form>
 </template>
 
-<script></script>
+<script>
+export default {
+  props: ['rules'],
+  emits: ['input'],
+  methods: {
+    input(event) {
+      this.$emit('input', event);
+    },
+  },
+  computed: {
+    canAddItem() {
+      return Object.getOwnPropertyNames(this.rules)
+        .filter((key) => key !== '__ob__')
+        .map((key) => this.rules[key].isValid)
+        .every((validState) => validState);
+    },
+  },
+};
+</script>
 
 <style scoped lang="scss">
 form {
