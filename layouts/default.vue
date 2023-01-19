@@ -57,7 +57,7 @@ const rules = {
     reason: '',
     value: '',
     isMandatory: true,
-    pattern: '^http(s)?:\\/\\/\\w+$',
+    pattern: '^http(s)?:\\/\\/.+$',
     patternError: 'Введите ссылку в формате https://example.com/...',
   },
   priceInRubles: {
@@ -88,10 +88,6 @@ export default {
       const { name, value } = event.target;
 
       this.validator.updateRulesInPlace(this.rules, name, value);
-
-      console.log(this.rules);
-
-      console.log(JSON.stringify(this.rules, null, '\t'));
     },
   },
 };
