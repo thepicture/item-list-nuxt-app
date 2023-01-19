@@ -5,6 +5,7 @@
       label="Наименование товара"
       placeholder="Введите наименование товара"
       mandatory
+      @input="input"
     />
     <TextInput
       name="description"
@@ -12,24 +13,36 @@
       placeholder="Введите описание товара"
       multiline
       class="description"
+      @input="input"
     />
     <TextInput
       name="imageLink"
       label="Ссылка на изображение товара"
       placeholder="Введите ссылку"
       mandatory
+      @input="input"
     />
     <TextInput
       name="priceInRubles"
       label="Цена товара"
       placeholder="Введите цену"
       mandatory
+      @input="input"
     />
     <Button type="submit">Добавить товар</Button>
   </form>
 </template>
 
-<script></script>
+<script>
+export default {
+  emits: ['input'],
+  methods: {
+    input(event) {
+      this.$emit('input', event);
+    },
+  },
+};
+</script>
 
 <style scoped lang="scss">
 form {

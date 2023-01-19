@@ -2,12 +2,14 @@
   <main>
     <h1>Добавление товара</h1>
     <Select :options="options" class="sort-selector"></Select>
-    <AddItemForm class="form" />
+    <AddItemForm class="form" :rules="rules" @input="input" />
     <ItemList :items="items" />
   </main>
 </template>
 
 <script>
+import { Validator } from '@/features/validator/Validator';
+
 const stubItemTemplate = {
   title: 'Наименование товара',
   description:
@@ -37,6 +39,37 @@ const sortOptions = [
   },
 ];
 
+const rules = {
+  title: {
+    isValid: false,
+    reason: '',
+    value: '',
+    isMandatory: true,
+  },
+  description: {
+    isValid: false,
+    reason: '',
+    value: '',
+    isMandatory: false,
+  },
+  imageLink: {
+    isValid: false,
+    reason: '',
+    value: '',
+    isMandatory: true,
+    pattern: '^http(s)?:\\/\\/\\w+$',
+    patternError: 'Введите ссылку в формате https://example.com/...',
+  },
+  priceInRubles: {
+    isValid: false,
+    reason: '',
+    value: '',
+    isMandatory: true,
+    pattern: '^[0-9]{1,16}$',
+    patternError: 'Цена должна быть числом',
+  },
+};
+
 const stubItems = new Array(16)
   .fill(stubItemTemplate)
   .map((item, index) => ({ ...item, id: index + 1 }));
@@ -46,7 +79,20 @@ export default {
     return {
       items: stubItems,
       options: sortOptions,
+      rules,
+      validator: new Validator(),
     };
+  },
+  methods: {
+    input(event) {
+      const { name, value } = event.target;
+
+      this.validator.updateRulesInPlace(this.rules, name, value);
+
+      console.log(this.rules);
+
+      console.log(JSON.stringify(this.rules, null, '\t'));
+    },
   },
 };
 </script>

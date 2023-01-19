@@ -5,8 +5,9 @@
       :name="name"
       :placeholder="placeholder"
       v-if="multiline"
+      @input="input"
     ></textarea>
-    <input :name="name" :placeholder="placeholder" v-else />
+    <input :name="name" :placeholder="placeholder" v-else @input="input" />
   </section>
 </template>
 
@@ -18,6 +19,12 @@ export default {
     name: String,
     mandatory: Boolean,
     multiline: Boolean,
+  },
+  emits: ['input'],
+  methods: {
+    input(event) {
+      this.$emit('input', event);
+    },
   },
 };
 </script>
