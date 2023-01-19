@@ -4,9 +4,20 @@
     <textarea
       :name="name"
       :placeholder="placeholder"
+      @input="input"
+      :class="{ invalid: !rule.isValid && rule.reason }"
       v-if="multiline"
     ></textarea>
-    <input :name="name" :placeholder="placeholder" v-else />
+    <input
+      :name="name"
+      :placeholder="placeholder"
+      @input="input"
+      :class="{ invalid: !rule.isValid && rule.reason }"
+      v-else
+    />
+    <label :for="name" class="reason" :class="{ error: rule.reason }">{{
+      rule.reason
+    }}</label>
   </section>
 </template>
 
@@ -18,6 +29,13 @@ export default {
     name: String,
     mandatory: Boolean,
     multiline: Boolean,
+    rule: Object,
+  },
+  emits: ['input'],
+  methods: {
+    input(event) {
+      this.$emit('input', event);
+    },
   },
 };
 </script>
@@ -41,7 +59,7 @@ textarea {
   height: calc(100% - 2em);
   padding: 1em;
 
-  border: none;
+  border: 2px solid transparent;
   border-radius: 0.3em;
 
   box-shadow: rgba(149, 157, 165, 0.3) 0px 2px 6px;
@@ -63,6 +81,26 @@ textarea::placeholder {
 
   content: '⬤';
 
+  color: #f77;
+}
+
+.invalid {
+  border: solid;
+  border: 2px solid #f77;
+}
+
+.invalid:focus {
+  outline: #f77;
+}
+
+.reason {
+  visibility: hidden;
+  height: 0.7em;
+  font-size: 0.7em;
+}
+
+.error {
+  visibility: visible;
   color: #f77;
 }
 </style>
