@@ -1,5 +1,7 @@
 <template>
-  <button :type="type"><slot></slot></button>
+  <button :type="type" :class="{ enabled }" :disabled="!enabled">
+    <slot></slot>
+  </button>
 </template>
 
 <script>
@@ -7,6 +9,7 @@ export default {
   props: {
     content: String,
     type: String,
+    enabled: Boolean,
   },
 };
 </script>
@@ -26,5 +29,11 @@ button {
   width: 100%;
 
   box-sizing: border-box;
+}
+
+.enabled {
+  color: white;
+  background-color: rgb(63, 165, 63);
+  cursor: pointer;
 }
 </style>
