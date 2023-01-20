@@ -1,6 +1,11 @@
 <template>
   <article>
-    <img :src="traits.imageLink" loading="lazy" />
+    <img
+      :src="traits.imageLink"
+      :alt="`${traits.title} | ${traits.description}`"
+      loading="lazy"
+      @error="replaceByDefaultImage"
+    />
     <section>
       <h2>{{ traits.title }}</h2>
       <p>{{ traits.description }}</p>
@@ -12,6 +17,8 @@
 </template>
 
 <script>
+import { IMAGE_LOAD_FAIL_STUB_SRC } from '@/config/constants';
+
 export default {
   props: {
     traits: {
@@ -19,6 +26,12 @@ export default {
       description: String,
       imageLink: String,
       priceInRubles: Number,
+    },
+  },
+  methods: {
+    replaceByDefaultImage(event) {
+      this.isImageLoadFailed = true;
+      event.target.src = IMAGE_LOAD_FAIL_STUB_SRC;
     },
   },
 };
@@ -41,14 +54,19 @@ img {
   margin: 0;
   padding: 0;
 
+  width: 100%;
+  height: 16em;
   max-width: 100%;
 
   border-top-left-radius: 0.3em;
   border-top-right-radius: 0.3em;
+
+  object-fit: cover;
 }
 
 .price {
   padding-top: 1em;
+
   font-size: 1.5em;
 }
 </style>
