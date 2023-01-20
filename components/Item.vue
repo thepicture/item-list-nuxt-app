@@ -13,6 +13,7 @@
         <strong>{{ traits.priceInRubles }} руб.</strong>
       </p>
     </section>
+    <DeleteButton class="delete-icon" v-if="traits.mine" @prune="prune" />
   </article>
 </template>
 
@@ -33,17 +34,22 @@ export default {
       this.isImageLoadFailed = true;
       event.target.src = IMAGE_LOAD_FAIL_STUB_SRC;
     },
+    prune() {
+      this.$emit('prune', this.traits.id);
+    },
   },
 };
 </script>
 
 <style scoped>
 article {
+  position: relative;
   border-radius: 0.3em;
 
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-
   background-color: white;
+
+  cursor: pointer;
 }
 
 section {
@@ -68,5 +74,14 @@ img {
   padding-top: 1em;
 
   font-size: 1.5em;
+}
+
+.delete-icon {
+  position: absolute;
+
+  top: 0;
+  right: 0;
+
+  transform: translate(5px, -5px);
 }
 </style>

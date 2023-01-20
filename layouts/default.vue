@@ -3,7 +3,7 @@
     <h1>Добавление товара</h1>
     <Select :options="options" class="sort-selector"></Select>
     <AddItemForm class="form" :rules="rules" @input="input" @submit="submit" />
-    <ItemList :items="items" />
+    <ItemList :items="items" @prune="prune" />
   </main>
 </template>
 
@@ -157,6 +157,9 @@ export default {
 
       this.resetRules();
       event.target.reset();
+    },
+    prune(id) {
+      this.items = this.items.filter((item) => item.id !== id);
     },
   },
 };
