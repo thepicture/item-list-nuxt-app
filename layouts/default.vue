@@ -2,21 +2,26 @@
   <main>
     <h1>Добавление товара</h1>
     <Select :options="options" class="sort-selector"></Select>
-    <AddItemForm class="form" :rules="rules" @input="input" />
-    <ItemList :items="items" />
+    <AddItemForm class="form" :rules="rules" @input="input" @submit="submit" />
+    <ItemList :items="items" @prune="prune" />
   </main>
 </template>
 
 <script>
 import { Validator } from '@/features/validator/Validator';
+import {
+  STUB_TITLE,
+  STUB_DESCRIPTION,
+  STUB_IMAGE_SRC,
+  STUB_PRICE_IN_RUBLES,
+} from '@/config/constants';
 
 const stubItemTemplate = {
-  title: 'Наименование товара',
-  description:
-    'Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк',
-  imageLink:
-    'https://media.wired.com/photos/5b64db3717c26f0496f4d62d/master/pass/Canon-G7XII-SOURCE-Canon.jpg',
-  priceInRubles: 10000,
+  title: STUB_TITLE,
+  description: STUB_DESCRIPTION,
+  imageLink: STUB_IMAGE_SRC,
+  priceInRubles: STUB_PRICE_IN_RUBLES,
+  mine: false,
 };
 
 const sortOptions = [
@@ -88,6 +93,73 @@ export default {
       const { name, value } = event.target;
 
       this.validator.updateRulesInPlace(this.rules, name, value);
+    },
+    async getIsImageLinkValid(src) {
+      return await new Promise((resolve) => {
+        const image = new Image();
+
+        image.addEventListener('load', () => resolve(true));
+        image.addEventListener('error', () => resolve(false));
+
+        image.src = src;
+      });
+    },
+    resetRules() {
+      const keys = Object.getOwnPropertyNames(this.rules).filter(
+        (rule) => !rule.startsWith('_')
+      );
+
+      for (const key of keys) {
+        const rule = this.rules[key];
+        rule.value = '';
+        rule.isValid = false;
+      }
+    },
+    async submit(event) {
+      const isImageLinkValid = await this.getIsImageLinkValid(
+        this.rules.imageLink.value
+      );
+
+      if (!isImageLinkValid) {
+        const reason = `Ссылка на изображение \
+          недействительна. \
+          Операция добавления товара отменена`;
+
+        this.rules.imageLink.reason = reason;
+        this.rules.imageLink.isValid = false;
+
+        return;
+      }
+
+      let id;
+
+      if (this.items.length === 0) {
+        id = 1;
+      } else {
+        const lastId = this.items
+          .map((item) => item.id)
+          .sort((id1, id2) => id2 - id1)[0];
+
+        id = lastId + 1;
+      }
+
+      this.items = [
+        ...this.items,
+        {
+          id,
+          title: this.rules.title.value,
+          description: this.rules.description.value,
+          imageLink: this.rules.imageLink.value,
+          priceInRubles: this.rules.priceInRubles.value,
+          mine: true,
+        },
+      ];
+
+      this.resetRules();
+      event.target.reset();
+    },
+    prune(id) {
+      this.items = this.items.filter((item) => item.id !== id);
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form @submit.prevent="submit">
     <TextInput
       name="title"
       label="Наименование товара"
@@ -44,6 +44,9 @@ export default {
   methods: {
     input(event) {
       this.$emit('input', event);
+    },
+    submit(event) {
+      this.$emit('submit', event);
     },
   },
   computed: {
