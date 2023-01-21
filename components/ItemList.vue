@@ -4,6 +4,7 @@
       v-bind:key="item.id"
       :traits="item"
       v-for="item in items"
+      @edit="edit"
       @prune="prune"
     />
   </section>
@@ -15,6 +16,9 @@ export default {
   methods: {
     prune(id) {
       this.$emit('prune', id);
+    },
+    edit(id) {
+      this.$emit('edit', id);
     },
   },
 };
