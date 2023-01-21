@@ -1,5 +1,9 @@
 <template>
-  <article @click="edit" :class="{ 'can-edit': traits.mine }">
+  <article
+    :id="`item-${traits.id}`"
+    @click="edit"
+    :class="{ 'can-edit': traits.mine, new: isNew && traits.mine }"
+  >
     <img
       :src="traits.imageLink"
       :alt="`${traits.title} | ${traits.description}`"
@@ -10,7 +14,7 @@
       <h2>{{ traits.title }}</h2>
       <p>{{ traits.description }}</p>
       <p class="price">
-        <strong>{{ traits.priceInRubles }} руб.</strong>
+        <strong>{{ formattedPriceInRubles }}</strong>
       </p>
     </section>
     <DeleteButton class="delete-icon" v-if="traits.mine" @prune="prune" />
@@ -29,6 +33,24 @@ export default {
       priceInRubles: Number,
     },
   },
+  data() {
+    return { isNew: true };
+  },
+  computed: {
+    formattedPriceInRubles() {
+      const priceAsString = String(this.traits.priceInRubles);
+
+      if (priceAsString.length > 3) {
+        const indexOfSpace = Math.floor(priceAsString.length / 2);
+
+        return `${priceAsString.slice(0, indexOfSpace)} ${priceAsString.slice(
+          indexOfSpace
+        )} руб.`;
+      } else {
+        return `${priceAsString} руб.`;
+      }
+    },
+  },
   methods: {
     replaceByDefaultImage(event) {
       this.isImageLoadFailed = true;
@@ -41,16 +63,26 @@ export default {
       this.$emit('edit', this.traits.id);
     },
   },
+  mounted() {
+    this.timeout = setTimeout(() => (this.isNew = false), 2 * 1024);
+  },
+  beforeDestroy() {
+    clearTimeout(this.timeout);
+  },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 article {
   position: relative;
   border-radius: 0.3em;
 
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   background-color: white;
+}
+
+.new {
+  border: 3px solid #ff8484;
 }
 
 .can-edit {

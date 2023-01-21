@@ -1,5 +1,5 @@
 <template>
-  <select>
+  <select :value="value" @change="change">
     <option
       :selected="option.selected"
       :value="option.value"
@@ -12,7 +12,12 @@
 
 <script>
 export default {
-  props: ['options'],
+  props: ['options', 'value'],
+  methods: {
+    change(event) {
+      this.$emit('change', event.target.value);
+    },
+  },
 };
 </script>
 
