@@ -42,15 +42,18 @@ export default {
 button {
   display: flex;
 
-  padding: 0.4em;
+  width: 32px;
+  height: 32px;
+
+  justify-content: center;
+  align-items: center;
+
+  background: var(--attention-color);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 
   border: none;
   border-radius: 10px;
 
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-
-  background: #ff8484;
-
-  cursor: pointer;
+  cursor: url('/hover.svg'), pointer;
 }
 </style>

@@ -69,11 +69,11 @@ export default {
 form {
   padding: 2em;
 
-  border-radius: 0.3em;
+  box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.04),
+    0px 6px 10px rgba(0, 0, 0, 0.02);
+  border-radius: 4px;
 
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-
-  background-color: white;
+  background: var(--form-background-color);
 }
 
 button {
@@ -82,5 +82,11 @@ button {
 
 .description {
   height: 16em;
+}
+
+@media screen and (max-width: 640px) {
+  .description {
+    height: auto;
+  }
 }
 </style>
