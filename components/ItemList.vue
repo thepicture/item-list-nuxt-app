@@ -6,6 +6,7 @@
       v-for="item in items"
       @edit="edit"
       @prune="prune"
+      class="item"
     />
   </section>
 </template>
@@ -24,10 +25,19 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 section {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: repeat(auto-fit, minmax(332px, 1fr));
+
   gap: 1em;
+}
+
+.item {
+  min-width: 332px;
+  height: 423px;
+
+  flex-grow: 1;
+  flex-basis: 0;
 }
 </style>

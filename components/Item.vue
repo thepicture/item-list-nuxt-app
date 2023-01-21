@@ -75,10 +75,30 @@ export default {
 <style scoped lang="scss">
 article {
   position: relative;
-  border-radius: 0.3em;
 
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  background-color: white;
+  border-radius: 4px;
+
+  background: #fffefb;
+  box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.04),
+    0px 6px 10px rgba(0, 0, 0, 0.02);
+}
+
+h2 {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 25px;
+
+  color: #3f3f3f;
+}
+
+p {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+
+  color: #3f3f3f;
 }
 
 .new {
@@ -86,7 +106,7 @@ article {
 }
 
 .can-edit {
-  cursor: pointer;
+  cursor: url('/hover.svg'), pointer;
 }
 
 section {
@@ -99,18 +119,22 @@ img {
 
   width: 100%;
   height: 16em;
-  max-width: 100%;
+  height: 200px;
 
-  border-top-left-radius: 0.3em;
-  border-top-right-radius: 0.3em;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 
   object-fit: cover;
 }
 
 .price {
-  padding-top: 1em;
+  padding-top: 8px;
 
-  font-size: 1.5em;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 30px;
+
+  color: #3f3f3f;
 }
 
 .delete-icon {

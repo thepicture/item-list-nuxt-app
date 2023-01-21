@@ -243,28 +243,52 @@ main {
   position: relative;
 
   display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: 332px 1fr;
 
   gap: 1em;
 }
 
 h1 {
   margin: 0;
+
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 35px;
+
+  color: #3f3f3f;
 }
 
 .form {
   position: sticky;
   top: 2em;
 
-  width: 25em;
-
   height: fit-content;
+
+  z-index: 1;
 }
 
 .sort-selector {
   justify-self: end;
 
   max-width: 10em;
+
+  z-index: 1;
+}
+
+@media screen and (max-width: 640px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+
+  .form {
+    top: 4em;
+  }
+
+  .sort-selector {
+    position: sticky;
+    top: 1em;
+  }
 }
 </style>

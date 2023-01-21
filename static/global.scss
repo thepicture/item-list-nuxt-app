@@ -1,9 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+
+:root {
+    --form-background-color: #fffefb; 
+    --button-primary-background-color: #7bae73; 
+    --button-disabled-background-color:  #eeeeee;
+    --attention-color: #ff8484;
+}
+
 html {
     box-sizing: border-box;
 
     background-color: whitesmoke;
 
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Source Sans Pro', sans-serif;
+
+    color: #3F3F3F;
 }
 
 body {
