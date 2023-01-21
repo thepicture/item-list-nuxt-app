@@ -5,6 +5,7 @@
       :name="name"
       :placeholder="placeholder"
       @input="input"
+      v-model="rule.value"
       :class="{ invalid: !rule.isValid && rule.reason }"
       v-if="multiline"
     ></textarea>
@@ -12,10 +13,11 @@
       :name="name"
       :placeholder="placeholder"
       @input="input"
+      v-model="rule.value"
       :class="{ invalid: !rule.isValid && rule.reason }"
       v-else
     />
-    <label :for="name" class="reason" :class="{ error: rule.reason }">{{
+    <label :for="name" :class="{ reason: true, error: rule.reason }">{{
       rule.reason
     }}</label>
   </section>

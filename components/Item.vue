@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <article @click="edit" :class="{ 'can-edit': traits.mine }">
     <img
       :src="traits.imageLink"
       :alt="`${traits.title} | ${traits.description}`"
@@ -37,6 +37,9 @@ export default {
     prune() {
       this.$emit('prune', this.traits.id);
     },
+    edit() {
+      this.$emit('edit', this.traits.id);
+    },
   },
 };
 </script>
@@ -48,7 +51,9 @@ article {
 
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   background-color: white;
+}
 
+.can-edit {
   cursor: pointer;
 }
 

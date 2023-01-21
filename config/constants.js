@@ -7,4 +7,5 @@ module.exports = {
     'https://upload.wikimedia.org/wikipedia/commons/f/fc/No_picture_available.png',
   STUB_IMAGE_SRC:
     'https://media.wired.com/photos/5b64db3717c26f0496f4d62d/master/pass/Canon-G7XII-SOURCE-Canon.jpg',
+  UNASSIGNED_ID: 0,
 };
