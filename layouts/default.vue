@@ -3,7 +3,7 @@
     <h1>Добавление товара</h1>
     <Select :options="options" class="sort-selector"></Select>
     <AddItemForm class="form" :rules="rules" @input="input" @submit="submit" />
-    <ItemList :items="items" @prune="prune" />
+    <ItemList :items="items" @edit="edit" @prune="prune" />
   </main>
 </template>
 
@@ -14,6 +14,7 @@ import {
   STUB_DESCRIPTION,
   STUB_IMAGE_SRC,
   STUB_PRICE_IN_RUBLES,
+  UNASSIGNED_ID,
 } from '@/config/constants';
 
 const stubItemTemplate = {
@@ -45,6 +46,7 @@ const sortOptions = [
 ];
 
 const rules = {
+  id: UNASSIGNED_ID,
   title: {
     isValid: false,
     reason: '',
@@ -110,7 +112,13 @@ export default {
       );
 
       for (const key of keys) {
+        if (key === 'id') {
+          this.rules[key] = 0;
+          continue;
+        }
+
         const rule = this.rules[key];
+
         rule.value = '';
         rule.isValid = false;
       }
@@ -143,20 +151,57 @@ export default {
         id = lastId + 1;
       }
 
-      this.items = [
-        ...this.items,
-        {
-          id,
-          title: this.rules.title.value,
-          description: this.rules.description.value,
-          imageLink: this.rules.imageLink.value,
-          priceInRubles: this.rules.priceInRubles.value,
-          mine: true,
-        },
-      ];
+      if (this.rules.id === UNASSIGNED_ID) {
+        this.items = [
+          ...this.items,
+          {
+            id,
+            title: this.rules.title.value,
+            description: this.rules.description.value,
+            imageLink: this.rules.imageLink.value,
+            priceInRubles: this.rules.priceInRubles.value,
+            mine: true,
+          },
+        ];
+      } else {
+        this.items = this.items.map((item) => {
+          if (item.id === this.rules.id) {
+            item = {
+              ...item,
+              title: this.rules.title.value,
+              description: this.rules.description.value,
+              imageLink: this.rules.imageLink.value,
+              priceInRubles: this.rules.priceInRubles.value,
+            };
+          }
+
+          return item;
+        });
+      }
 
       this.resetRules();
       event.target.reset();
+
+      document.body.scrollIntoView(document.body.clientTop);
+    },
+    edit(id) {
+      const item = this.items.find((item) => item.id === id);
+
+      this.rules.id = id;
+      this.rules.title.value = item.title;
+      this.rules.description.value = item.description;
+      this.rules.imageLink.value = item.imageLink;
+      this.rules.priceInRubles.value = item.priceInRubles;
+
+      this.makeRulesValid();
+
+      console.log(this.rules);
+    },
+    makeRulesValid() {
+      this.rules.title.isValid = true;
+      this.rules.description.isValid = true;
+      this.rules.imageLink.isValid = true;
+      this.rules.priceInRubles.isValid = true;
     },
     prune(id) {
       this.items = this.items.filter((item) => item.id !== id);

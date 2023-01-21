@@ -6,6 +6,7 @@
       placeholder="Введите наименование товара"
       mandatory
       :rule="rules.title"
+      :value="rules.title.value"
       @input="input"
     />
     <TextInput
@@ -33,7 +34,9 @@
       :rule="rules.priceInRubles"
       @input="input"
     />
-    <Button type="submit" :enabled="canAddItem">Добавить товар</Button>
+    <Button type="submit" :enabled="canAddItem">{{
+      rules.id ? 'Обновить товар' : 'Добавить товар'
+    }}</Button>
   </form>
 </template>
 
@@ -51,8 +54,11 @@ export default {
   },
   computed: {
     canAddItem() {
+      console.log('@@@');
       return Object.getOwnPropertyNames(this.rules)
-        .filter((key) => key !== '__ob__')
+        .filter((key) =>
+          ['__ob__', 'id'].every((bannedKey) => key !== bannedKey)
+        )
         .map((key) => this.rules[key].isValid)
         .every((validState) => validState);
     },
