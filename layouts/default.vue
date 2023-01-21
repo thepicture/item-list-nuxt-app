@@ -1,7 +1,12 @@
 <template>
   <main>
     <h1>Добавление товара</h1>
-    <Select :options="options" class="sort-selector"></Select>
+    <Select
+      :options="options"
+      :value="sortValue"
+      @change="sortChange"
+      class="sort-selector"
+    ></Select>
     <AddItemForm class="form" :rules="rules" @input="input" @submit="submit" />
     <ItemList :items="items" @edit="edit" @prune="prune" />
   </main>
@@ -25,23 +30,31 @@ const stubItemTemplate = {
   mine: false,
 };
 
+const priceSorter = (items) =>
+  items.sort((i1, i2) => i1.priceInRubles - i2.priceInRubles);
+const nameSorter = (items) => items.sort((i1, i2) => i1.title - i2.title);
+
 const sortOptions = [
   {
     content: 'По умолчанию',
     value: 'sortByNameAscending',
     selected: true,
+    sorter: nameSorter,
   },
   {
     content: 'По цене по возрастанию',
     value: 'sortByPriceAscending',
+    sorter: priceSorter,
   },
   {
     content: 'По цене по убыванию',
     value: 'sortByPriceDescending',
+    sorter: (items) => priceSorter(items).reverse(),
   },
   {
     content: 'По наименованию',
     value: 'sortByNameAscending',
+    sorter: nameSorter,
   },
 ];
 
@@ -54,7 +67,7 @@ const rules = {
     isMandatory: true,
   },
   description: {
-    isValid: false,
+    isValid: true,
     reason: '',
     value: '',
     isMandatory: false,
@@ -88,6 +101,8 @@ export default {
       options: sortOptions,
       rules,
       validator: new Validator(),
+      sortValue: sortOptions[0].value,
+      sortOptions,
     };
   },
   methods: {
@@ -114,6 +129,7 @@ export default {
       for (const key of keys) {
         if (key === 'id') {
           this.rules[key] = 0;
+
           continue;
         }
 
@@ -151,8 +167,10 @@ export default {
         id = lastId + 1;
       }
 
+      let items;
+
       if (this.rules.id === UNASSIGNED_ID) {
-        this.items = [
+        items = [
           ...this.items,
           {
             id,
@@ -164,7 +182,7 @@ export default {
           },
         ];
       } else {
-        this.items = this.items.map((item) => {
+        items = this.items.map((item) => {
           if (item.id === this.rules.id) {
             item = {
               ...item,
@@ -179,10 +197,15 @@ export default {
         });
       }
 
+      const sorter = this.getSorter(this.sortValue);
+
+      console.log(sorter, this.sortValue);
+      this.items = sorter(Object.assign([], items));
+
       this.resetRules();
       event.target.reset();
 
-      document.body.scrollIntoView(document.body.clientTop);
+      setTimeout(() => (window.location.href = `#item-${id}`));
     },
     edit(id) {
       const item = this.items.find((item) => item.id === id);
@@ -194,8 +217,6 @@ export default {
       this.rules.priceInRubles.value = item.priceInRubles;
 
       this.makeRulesValid();
-
-      console.log(this.rules);
     },
     makeRulesValid() {
       this.rules.title.isValid = true;
@@ -205,6 +226,13 @@ export default {
     },
     prune(id) {
       this.items = this.items.filter((item) => item.id !== id);
+    },
+    sortChange(value) {
+      this.sortValue = value;
+      this.items = this.getSorter(value)(Object.assign([], this.items));
+    },
+    getSorter(value) {
+      return this.sortOptions.find((option) => option.value === value).sorter;
     },
   },
 };
