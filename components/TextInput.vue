@@ -18,7 +18,7 @@
       v-else
     />
     <label :for="name" :class="{ reason: true, error: rule.reason }">{{
-      rule.reason
+      rule.reason || 'placeholder'
     }}</label>
   </section>
 </template>
@@ -43,25 +43,28 @@ export default {
 </script>
 
 <style scoped>
-section {
-  padding: 0.5em 0;
-}
-
 label {
   display: block;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
 
-  font-size: 0.85em;
+  padding-bottom: 4px;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 13px;
+
+  letter-spacing: -0.02em;
+
+  color: #49485e;
 }
 
 input,
 textarea {
   width: 100%;
   height: calc(100% - 2em);
-  padding: 1em;
+  padding: 9px;
 
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   border-radius: 0.3em;
 
   box-shadow: rgba(149, 157, 165, 0.3) 0px 2px 6px;
@@ -73,7 +76,13 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: #aaa;
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+
+  color: #b4b4b4;
 }
 
 .mandatory::after {
@@ -83,26 +92,41 @@ textarea::placeholder {
 
   content: '⬤';
 
-  color: #f77;
+  width: 4px;
+  height: 4px;
+
+  color: var(--attention-color);
+  border-radius: 4px;
 }
 
 .invalid {
   border: solid;
-  border: 2px solid #f77;
+  border: 1px solid #ff8484;
 }
 
 .invalid:focus {
-  outline: #f77;
+  border: 1px solid var(--attention-color);
+  outline: var(--attention-color);
 }
 
 .reason {
+  padding-top: 4px;
+
   visibility: hidden;
-  height: 0.7em;
-  font-size: 0.7em;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 8px;
+  line-height: 10px;
+
+  letter-spacing: -0.02em;
+
+  color: var(--attention-color);
 }
 
 .error {
   visibility: visible;
-  color: #f77;
+
+  color: var(--attention-color);
 }
 </style>
