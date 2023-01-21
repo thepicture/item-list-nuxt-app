@@ -54,7 +54,6 @@ export default {
   },
   computed: {
     canAddItem() {
-      console.log('@@@');
       return Object.getOwnPropertyNames(this.rules)
         .filter((key) =>
           ['__ob__', 'id'].every((bannedKey) => key !== bannedKey)
