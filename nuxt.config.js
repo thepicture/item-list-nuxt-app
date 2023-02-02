@@ -1,9 +1,9 @@
 export default {
+  target: 'static',
+  router: {
+    base: '/item-list-nuxt-app/',
+  },
   head: {
-    target: 'static',
-    router: {
-      base: '/item-list-nuxt-app/',
-    },
     generate: {
       dir: 'docs',
     },
