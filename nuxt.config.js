@@ -4,6 +4,9 @@ export default {
     router: {
       base: '/item-list-nuxt-app/',
     },
+    generate: {
+      dir: 'docs',
+    },
     title: 'item-list-nuxt-app',
     htmlAttrs: {
       lang: 'ru',
