@@ -3,10 +3,10 @@ export default {
   router: {
     base: '/item-list-nuxt-app/',
   },
+  generate: {
+    dir: 'docs',
+  },
   head: {
-    generate: {
-      dir: 'docs',
-    },
     title: 'item-list-nuxt-app',
     htmlAttrs: {
       lang: 'ru',
