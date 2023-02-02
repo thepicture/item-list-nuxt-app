@@ -1,5 +1,9 @@
 export default {
   head: {
+    target: 'static',
+    router: {
+      base: '/item-list-nuxt-app/',
+    },
     title: 'item-list-nuxt-app',
     htmlAttrs: {
       lang: 'ru',
